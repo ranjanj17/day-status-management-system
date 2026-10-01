@@ -1,0 +1,14 @@
+{
+  "name": "day-status-management-system",
+  "version": "1.0.0",
+  "description": "Day Status Management System",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "test:frontend": "npm run test --prefix frontend",
+    "test:backend": "npm run test --prefix backend",
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend"
+  }
+}

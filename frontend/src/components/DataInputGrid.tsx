@@ -241,7 +241,7 @@ export const DataInputGrid: React.FC = () => {
                         const isSaving = saving === dateStr;
 
                         return (
-                          <td key={`${month}-${day}`} className={`p-1 border-r border-slate-100 w-[120px] sm:w-[140px] xl:w-[150px] ${!isValidDate ? 'bg-[url("data:image/svg+xml,%3Csvg width=\'10\' height=\'10\' viewBox=\'0 0 10 10\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23f1f5f9\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M-1 11L11 -1V1L1 11H-1ZM11 11L-1 -1V1L9 11H11Z\'/%3E%3C/g%3E%3C/svg%3E")] bg-slate-100 cursor-not-allowed border-slate-200' : record?.status ? 'bg-blue-50/20' : 'bg-transparent hover:bg-slate-50'}`}>
+                          <td key={`${month}-${day}`} className={`p-1 border-r border-slate-100 w-[120px] sm:w-[140px] xl:w-[150px] ${!isValidDate ? 'bg-[url("data:image/svg+xml,%3Csvg width=\'10\' height=\'10\' viewBox=\'0 0 10 10\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23f1f5f9\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M-1 11L11 -1V1L1 11H-1ZM11 11L-1 -1V1L9 11H11Z\'/%3E%3C/g%3E%3C/svg%3E")] bg-slate-100 cursor-not-allowed border-slate-200' : record?.status ? 'bg-blue-50/20' : 'bg-slate-100 hover:bg-slate-200'}`}>
                             {isValidDate ? (
                               <StatusCell 
                                 record={record} 

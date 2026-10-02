@@ -103,7 +103,7 @@ export const PublicCalendar: React.FC = () => {
                         ? 'bg-gradient-to-b from-blue-600 to-indigo-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.3)] scale-[1.02] z-10 border border-transparent' 
                         : record 
                           ? 'bg-pink-50 text-pink-900 hover:bg-pink-100 border border-pink-200' 
-                          : 'bg-slate-50 text-slate-800 hover:bg-slate-100 border border-slate-200'}
+                          : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200'}
                     `}
                   >
                     <span className="relative z-10 text-sm sm:text-base font-extrabold leading-none">{day}</span>

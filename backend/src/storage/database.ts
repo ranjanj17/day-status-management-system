@@ -7,7 +7,7 @@ if (env.STORAGE_MODE === 'sql') {
   if (env.DATABASE_DIALECT === 'sqlite') {
     sequelizeInstance = new Sequelize({
       dialect: 'sqlite',
-      storage: './database.sqlite', // File where SQLite will save data
+      storage: process.env.NODE_ENV === 'test' ? ':memory:' : './database.sqlite', // Use memory for tests to avoid wiping local db
       logging: false,
     });
   } else {

@@ -9,8 +9,8 @@ export const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-3 sm:m-4 lg:mx-6 lg:mb-4 lg:mt-4 rounded-2xl transition-all duration-300 relative z-50">
-      <div className="container mx-auto px-5 sm:px-6 py-3.5 flex justify-between items-center">
+    <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm transition-all duration-300 rounded-b-2xl">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="group flex items-center gap-3 hover:opacity-100 transition-all">
           <div className="relative w-11 h-11 flex items-center justify-center">
             <div className="absolute inset-0 bg-gradient-to-tr from-sky-400 to-indigo-500 rounded-[14px] blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>

@@ -9,23 +9,18 @@ export const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm transition-all duration-300">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-3 sm:m-4 lg:mx-6 rounded-2xl transition-all duration-300 relative z-50">
+      <div className="container mx-auto px-5 sm:px-6 py-3.5 flex justify-between items-center">
         <Link to="/" className="group flex items-center gap-3 hover:opacity-100 transition-all">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-xl blur-md opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
-            <div className="relative w-full h-full bg-gradient-to-br from-white to-slate-50 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100/50 flex items-center justify-center overflow-hidden z-10">
-              <svg className="w-5 h-5 transform group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-500 ease-out" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 10.5L22 2L13.5 22L11 13L2 10.5Z" fill="url(#flyhigh_grad1)" stroke="url(#flyhigh_grad2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M11 13L22 2" stroke="url(#flyhigh_grad2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <div className="relative w-11 h-11 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-tr from-sky-400 to-indigo-500 rounded-[14px] blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
+            <div className="relative w-full h-full bg-gradient-to-br from-white to-slate-50/90 rounded-[14px] shadow-sm border border-white flex items-center justify-center overflow-hidden z-10">
+              <svg className="w-6 h-6 transform rotate-45 group-hover:scale-110 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500 ease-out drop-shadow-sm" viewBox="0 0 24 24" fill="url(#flyhigh_plane_grad)">
+                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
                 <defs>
-                  <linearGradient id="flyhigh_grad1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#3B82F6" stopOpacity="0.15"/>
-                    <stop offset="1" stopColor="#8B5CF6" stopOpacity="0.4"/>
-                  </linearGradient>
-                  <linearGradient id="flyhigh_grad2" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#2563EB" />
-                    <stop offset="1" stopColor="#7C3AED" />
+                  <linearGradient id="flyhigh_plane_grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#0284C7" />
+                    <stop offset="1" stopColor="#4F46E5" />
                   </linearGradient>
                 </defs>
               </svg>

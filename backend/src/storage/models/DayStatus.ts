@@ -7,6 +7,7 @@ export class DayStatus extends Model {
   public date!: string; // Stored as YYYY-MM-DD
   public status!: string;
   public created_by!: number;
+  public version!: number;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
@@ -36,12 +37,18 @@ export const initDayStatusModel = () => {
           key: 'id',
         },
       },
+      version: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      }
     },
     {
       sequelize,
       tableName: 'day_statuses',
       createdAt: 'created_at',
       updatedAt: 'updated_at',
+      version: true, // Optimistic locking
     }
   );
 };

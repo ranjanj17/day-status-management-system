@@ -38,10 +38,15 @@ graph TD
 - `day_statuses`: id, date (YYYY-MM-DD), status (Text), created_by (FK), created_at, updated_at
   - Unique constraint on `date`.
 
-## Storage Abstraction
+## Storage Abstraction & Databases
 The system supports two storage modes controlled via `STORAGE_MODE` in `.env`:
 - `in-memory`: Uses internal arrays. Perfect for testing and ephemeral demos. Data vanishes on restart.
-- `sql`: Uses Sequelize to connect to PostgreSQL/MySQL. Data persists.
+- `sql`: Uses Sequelize to connect to persistent databases.
+
+If `STORAGE_MODE=sql`, you can configure the database by changing `DATABASE_DIALECT` in `.env`:
+1. **SQLite (Default):** Set `DATABASE_DIALECT=sqlite`. No external server is needed. Data is safely stored in a local `database.sqlite` file.
+2. **PostgreSQL:** Set `DATABASE_DIALECT=postgres` and provide the `DATABASE_URL`. You can easily start a local instance by running `docker-compose up -d postgres`.
+3. **MySQL:** Set `DATABASE_DIALECT=mysql` and provide the `DATABASE_URL` (see `.env.example`). You can start a local instance by running `docker-compose up -d mysql`.
 
 ## Installation & Setup
 

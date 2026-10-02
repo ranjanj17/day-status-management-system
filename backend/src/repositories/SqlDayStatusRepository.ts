@@ -11,6 +11,7 @@ export class SqlDayStatusRepository implements DayStatusRepository {
       date: record.date,
       status: record.status,
       created_by: record.created_by,
+      version: record.version,
     };
   }
 
@@ -31,14 +32,14 @@ export class SqlDayStatusRepository implements DayStatusRepository {
       date: r.date,
       status: r.status,
       created_by: r.created_by,
+      version: r.version,
     }));
   }
 
   async findByYearAndMonth(year: number, month: number): Promise<DayStatusRecord[]> {
     const monthStr = month.toString().padStart(2, '0');
-    // Using string prefix matching or between depending on dialect, let's use between for safety
     const startDate = `${year}-${monthStr}-01`;
-    const endDate = `${year}-${monthStr}-31`; // The db engine will handle valid date limits in between
+    const endDate = `${year}-${monthStr}-31`; 
 
     const records = await DayStatusModel.findAll({
       where: {
@@ -53,23 +54,34 @@ export class SqlDayStatusRepository implements DayStatusRepository {
       date: r.date,
       status: r.status,
       created_by: r.created_by,
+      version: r.version,
     }));
   }
 
-  async upsert(date: string, status: string, userId: number): Promise<DayStatusRecord> {
-    const [record] = await DayStatusModel.upsert({
-      date,
-      status,
-      created_by: userId,
-    });
+  async upsert(date: string, status: string, userId: number, version?: number): Promise<DayStatusRecord> {
+    let record = await DayStatusModel.findOne({ where: { date } });
+    
+    if (record) {
+      if (version !== undefined && record.version !== version) {
+        throw new Error('CONCURRENCY_ERROR');
+      }
+      record.status = status;
+      record.created_by = userId;
+      await record.save(); // Sequelize handles the version increment
+    } else {
+      record = await DayStatusModel.create({
+        date,
+        status,
+        created_by: userId,
+      });
+    }
 
-    // In some dialects upsert doesn't return the full record immediately, 
-    // so we might need to fetch it or rely on the returned values if available
     return {
       id: record.id,
       date: record.date,
       status: record.status,
       created_by: record.created_by,
+      version: record.version,
     };
   }
 }

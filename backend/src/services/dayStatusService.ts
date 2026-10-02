@@ -37,7 +37,7 @@ export const getStatuses = async (year: number, month?: number) => {
   };
 };
 
-export const updateStatus = async (date: string, status: string, userId: number) => {
+export const updateStatus = async (date: string, status: string, userId: number, version?: number) => {
   if (!isValidCalendarDate(date)) {
     return { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid date' } };
   }
@@ -46,10 +46,16 @@ export const updateStatus = async (date: string, status: string, userId: number)
     return { success: false, error: { code: 'VALIDATION_ERROR', message: 'Status cannot be empty' } };
   }
 
-  const record = await dayStatusRepo.upsert(date, status.trim(), userId);
-
-  return {
-    success: true,
-    data: record,
-  };
+  try {
+    const record = await dayStatusRepo.upsert(date, status.trim(), userId, version);
+    return {
+      success: true,
+      data: record,
+    };
+  } catch (err: any) {
+    if (err.message === 'CONCURRENCY_ERROR' || err.name === 'SequelizeOptimisticLockError') {
+      return { success: false, error: { code: 'CONFLICT', message: 'The status was updated by someone else. Please refresh and try again.' } };
+    }
+    throw err;
+  }
 };

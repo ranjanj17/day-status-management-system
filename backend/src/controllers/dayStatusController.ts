@@ -14,6 +14,7 @@ const querySchema = z.object({
 
 const updateSchema = z.object({
   status: z.string().min(1, 'Status cannot be empty'),
+  version: z.number().optional(),
 });
 
 export const getStatusByDate = async (req: Request, res: Response) => {
@@ -71,12 +72,12 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     }
 
     const { date } = parsedParams.data;
-    const { status } = parsedBody.data;
+    const { status, version } = parsedBody.data;
 
-    const result = await dayStatusService.updateStatus(date, status, req.user.id);
+    const result = await dayStatusService.updateStatus(date, status, req.user.id, version);
 
     if (!result.success) {
-      return res.status(400).json(result);
+      return res.status(result.error.code === 'CONFLICT' ? 409 : 400).json(result);
     }
 
     res.json(result);

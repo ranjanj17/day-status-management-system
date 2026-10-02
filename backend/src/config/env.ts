@@ -8,7 +8,7 @@ const envSchema = z.object({
   PORT: z.string().default('3000'),
   JWT_SECRET: z.string(),
   STORAGE_MODE: z.enum(['in-memory', 'sql']).default('in-memory'),
-  DATABASE_DIALECT: z.enum(['postgres', 'mysql']).default('postgres'),
+  DATABASE_DIALECT: z.enum(['postgres', 'mysql', 'sqlite']).default('postgres'),
   DATABASE_URL: z.string().optional(),
   FRONTEND_URL: z.string().default('http://localhost:5173'),
 });

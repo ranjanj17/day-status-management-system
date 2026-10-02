@@ -30,9 +30,18 @@ export const DataInputGrid: React.FC = () => {
     const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     setSaving(dateStr);
     setError(null);
+    
+    const currentRecord = data.find(d => d.date === dateStr);
+    
     try {
       if (value.trim() === '') return;
-      const res = await api.put(`/day-status/${dateStr}`, { status: value });
+      
+      const payload: any = { status: value };
+      if (currentRecord?.version !== undefined) {
+        payload.version = currentRecord.version;
+      }
+
+      const res = await api.put(`/day-status/${dateStr}`, payload);
       // Update local state
       setData(prev => {
         const idx = prev.findIndex(d => d.date === dateStr);

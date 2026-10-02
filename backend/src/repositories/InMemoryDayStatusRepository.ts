@@ -18,12 +18,16 @@ export class InMemoryDayStatusRepository implements DayStatusRepository {
     return this.records.filter(r => r.date.startsWith(prefix));
   }
 
-  async upsert(date: string, status: string, userId: number): Promise<DayStatusRecord> {
+  async upsert(date: string, status: string, userId: number, version?: number): Promise<DayStatusRecord> {
     const existingIndex = this.records.findIndex(r => r.date === date);
     
     if (existingIndex !== -1) {
+      if (version !== undefined && this.records[existingIndex].version !== version) {
+        throw new Error('CONCURRENCY_ERROR');
+      }
       this.records[existingIndex].status = status;
       this.records[existingIndex].created_by = userId;
+      this.records[existingIndex].version += 1;
       return this.records[existingIndex];
     }
 
@@ -32,6 +36,7 @@ export class InMemoryDayStatusRepository implements DayStatusRepository {
       date,
       status,
       created_by: userId,
+      version: 1,
     };
     this.records.push(record);
     return record;

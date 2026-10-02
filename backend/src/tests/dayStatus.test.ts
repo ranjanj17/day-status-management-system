@@ -69,4 +69,38 @@ describe('Day Status API', () => {
     
     expect(res.status).toBe(400);
   });
+
+  it('should handle concurrent updates (race conditions) correctly using optimistic locking', async () => {
+    // 1. Initial write
+    const res1 = await request(app)
+      .put('/api/day-status/2026-05-15')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'Initial Status' });
+    
+    expect(res1.status).toBe(200);
+    const version = res1.body.data.version;
+    expect(version).toBeDefined();
+
+    // 2. Simulate two concurrent updates fetching the same version
+    const requestA = request(app)
+      .put('/api/day-status/2026-05-15')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'Update A', version });
+
+    const requestB = request(app)
+      .put('/api/day-status/2026-05-15')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'Update B', version });
+
+    const [resA, resB] = await Promise.all([requestA, requestB]);
+
+    // One should succeed (200) and the other should fail with 409 Conflict due to version mismatch
+    const statuses = [resA.status, resB.status];
+    expect(statuses).toContain(200);
+    expect(statuses).toContain(409);
+    
+    // The successful one should increment the version
+    const successfulRes = resA.status === 200 ? resA : resB;
+    expect(successfulRes.body.data.version).toBe(version + 1);
+  });
 });

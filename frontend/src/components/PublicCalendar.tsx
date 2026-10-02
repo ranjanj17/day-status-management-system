@@ -98,7 +98,7 @@ export const PublicCalendar: React.FC = () => {
                     key={day} 
                     onClick={() => handleDayClick(day)}
                     className={`
-                      relative flex flex-col items-center justify-start p-1.5 sm:p-2 pt-2 sm:pt-3 rounded-lg sm:rounded-xl cursor-pointer text-sm transition-all duration-300 w-full h-full overflow-hidden
+                      relative flex flex-col items-center p-1.5 sm:p-2 ${record ? 'pt-2 sm:pt-3 justify-start' : 'justify-center'} rounded-lg sm:rounded-xl cursor-pointer text-sm transition-all duration-300 w-full h-full overflow-hidden
                       ${isSelected 
                         ? 'bg-gradient-to-b from-blue-600 to-indigo-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.3)] scale-[1.02] z-10 border border-transparent' 
                         : record 

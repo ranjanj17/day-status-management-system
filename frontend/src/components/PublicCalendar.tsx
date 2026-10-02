@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { weekdaysWithColors } from '../data/constants';
 
 export const PublicCalendar: React.FC = () => {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -81,9 +82,9 @@ export const PublicCalendar: React.FC = () => {
         ) : (
           <div className="relative z-10 w-full flex-1 flex flex-col min-h-0">
             <div className="grid grid-cols-7 gap-1 sm:gap-2 flex-1 min-h-0" style={{ gridTemplateRows: 'min-content', gridAutoRows: 'minmax(0, 1fr)' }}>
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="text-center font-extrabold text-blue-600/80 text-[9px] sm:text-[10px] py-1 tracking-widest uppercase flex items-end justify-center pb-1">
-                  {day}
+              {weekdaysWithColors.map(day => (
+                <div key={day.name} className={`text-center font-extrabold ${day.color} text-[9px] sm:text-[10px] py-1 tracking-widest uppercase flex items-end justify-center pb-1`}>
+                  {day.name}
                 </div>
               ))}
               {blanks.map(b => <div key={`blank-${b}`} className="p-1 sm:p-2 w-full h-full"></div>)}

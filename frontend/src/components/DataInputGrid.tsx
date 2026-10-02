@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { monthsWithColors, dayColors } from '../data/constants';
 
 export const DataInputGrid: React.FC = () => {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -103,17 +104,20 @@ export const DataInputGrid: React.FC = () => {
                 <thead className="text-[10px] text-slate-500 uppercase bg-slate-100/80 sticky top-0 z-30 shadow-sm font-extrabold tracking-widest border-b border-slate-200 backdrop-blur-md">
                   <tr>
                     <th className="px-2 py-3 sm:px-4 sm:py-4 border-r border-slate-200 bg-slate-100/90 backdrop-blur-md sticky left-0 z-40 min-w-[50px] sm:min-w-[60px] text-center shadow-[1px_0_0_0_#e2e8f0]">Day</th>
-                    {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map(m => (
-                      <th key={m} className="px-4 py-3 sm:px-6 sm:py-4 border-r border-slate-200 min-w-[120px] sm:min-w-[140px] xl:min-w-[160px]">{m}</th>
+                    {monthsWithColors.map(m => (
+                      <th key={m.name} className={`px-4 py-3 sm:px-6 sm:py-4 border-r border-slate-200 min-w-[120px] sm:min-w-[140px] xl:min-w-[160px] ${m.color}`}>{m.name}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => {
+                    const dayColor = dayColors[(day - 1) % dayColors.length];
+                    
+                    return (
                     <tr key={day} className="hover:bg-slate-50 transition-colors group">
                       <td className={`
                         px-2 py-2 sm:px-4 sm:py-2 border-r border-slate-200 bg-slate-50 group-hover:bg-slate-100
-                        sticky left-0 z-20 text-center font-bold text-slate-600 transition-colors shadow-[1px_0_0_0_#e2e8f0] text-xs sm:text-sm
+                        sticky left-0 z-20 text-center font-extrabold ${dayColor} transition-colors shadow-[1px_0_0_0_#e2e8f0] text-xs sm:text-sm
                       `}>
                         {day}
                       </td>
@@ -137,7 +141,7 @@ export const DataInputGrid: React.FC = () => {
                                     }
                                   }}
                                   disabled={isSaving}
-                                  className={`w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-blue-500/50 text-slate-800 placeholder-slate-400 transition-all font-bold disabled:opacity-50 text-xs sm:text-sm rounded-lg ${record?.status ? 'bg-transparent text-blue-700' : 'bg-slate-50/50 hover:bg-slate-100/50'}`}
+                                  className={`w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-blue-500/50 transition-all font-bold disabled:opacity-50 text-xs sm:text-sm rounded-lg border cursor-text placeholder-transition ${record?.status ? 'bg-blue-50/40 border-blue-200 text-blue-700 shadow-sm' : 'bg-slate-50/80 border-transparent text-slate-800 placeholder-slate-400 hover:bg-blue-50/50 hover:border-blue-200 hover:placeholder-blue-500 hover:text-blue-600 hover:shadow-sm'}`}
                                 />
                                 {isSaving && (
                                   <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
@@ -155,7 +159,8 @@ export const DataInputGrid: React.FC = () => {
                         );
                       })}
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

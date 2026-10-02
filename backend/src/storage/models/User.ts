@@ -2,11 +2,11 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../database';
 
 export class User extends Model {
-  public id!: number;
-  public email!: string;
-  public password_hash!: string;
-  public readonly created_at!: Date;
-  public readonly updated_at!: Date;
+  declare id: number;
+  declare email: string;
+  declare password_hash: string;
+  declare created_at: Date;
+  declare updated_at: Date;
 }
 
 export const initUserModel = () => {

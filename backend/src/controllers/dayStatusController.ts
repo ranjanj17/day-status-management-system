@@ -77,7 +77,7 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     const result = await dayStatusService.updateStatus(date, status, req.user.id, version);
 
     if (!result.success) {
-      return res.status(result.error.code === 'CONFLICT' ? 409 : 400).json(result);
+      return res.status(result.error?.code === 'CONFLICT' ? 409 : 400).json(result);
     }
 
     res.json(result);

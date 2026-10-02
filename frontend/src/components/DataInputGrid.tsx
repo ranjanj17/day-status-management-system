@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
 
 export const DataInputGrid: React.FC = () => {
   const [year, setYear] = useState(new Date().getFullYear());

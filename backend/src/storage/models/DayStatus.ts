@@ -3,13 +3,13 @@ import { sequelize } from '../database';
 import { User } from './User';
 
 export class DayStatus extends Model {
-  public id!: number;
-  public date!: string; // Stored as YYYY-MM-DD
-  public status!: string;
-  public created_by!: number;
-  public version!: number;
-  public readonly created_at!: Date;
-  public readonly updated_at!: Date;
+  declare id: number;
+  declare date: string; // Stored as YYYY-MM-DD
+  declare status: string;
+  declare created_by: number;
+  declare version: number;
+  declare created_at: Date;
+  declare updated_at: Date;
 }
 
 export const initDayStatusModel = () => {

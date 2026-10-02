@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "day-status-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API for Day Status Management System",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.ts",

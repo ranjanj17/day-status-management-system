@@ -9,7 +9,7 @@ export const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-3 sm:m-4 lg:mx-6 rounded-2xl transition-all duration-300 relative z-50">
+    <nav className="bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-3 sm:m-4 lg:mx-6 lg:mb-4 lg:mt-4 rounded-2xl transition-all duration-300 relative z-50">
       <div className="container mx-auto px-5 sm:px-6 py-3.5 flex justify-between items-center">
         <Link to="/" className="group flex items-center gap-3 hover:opacity-100 transition-all">
           <div className="relative w-11 h-11 flex items-center justify-center">

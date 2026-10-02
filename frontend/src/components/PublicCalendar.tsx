@@ -40,54 +40,123 @@ export const PublicCalendar: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-white rounded shadow mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">Day Status Viewer</h2>
-      
-      <div className="flex justify-center mb-6 space-x-4">
-        <select value={year} onChange={(e) => setYear(Number(e.target.value))} className="p-2 border rounded">
-          {[2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
-        </select>
-        <select value={month} onChange={(e) => setMonth(Number(e.target.value))} className="p-2 border rounded">
-          {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => (
-            <option key={i+1} value={i+1}>{m}</option>
-          ))}
-        </select>
+    <div className="w-full h-full px-2 pb-2 pt-[4px] sm:px-4 sm:pb-2 sm:pt-[4px] md:px-6 md:pb-2 md:pt-[4px] animate-in fade-in duration-500 ease-out flex flex-col items-center justify-center overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-2xl rounded-xl border border-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] pt-1 px-4 pb-2 sm:pt-1 sm:px-6 sm:pb-2 relative overflow-hidden w-full max-w-[100rem] h-full flex flex-col">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-1 sm:mb-2 relative z-10 flex-none">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-800 tracking-tight text-center sm:text-left">Day Status</h2>
+            <p className="text-slate-500 mt-0 text-[10px] sm:text-sm font-semibold text-center sm:text-left">Select a date to view updates</p>
+          </div>
+          
+          <div className="flex space-x-2 mt-3 sm:mt-0">
+            <div className="relative">
+              <select 
+                value={year} 
+                onChange={(e) => setYear(Number(e.target.value))} 
+                className="pl-3 pr-8 py-1.5 sm:py-2 bg-white border border-blue-100 rounded-xl text-slate-800 font-bold focus:ring-2 focus:ring-blue-500/50 outline-none cursor-pointer hover:bg-blue-50/50 transition-all appearance-none text-xs sm:text-sm hover:border-blue-200"
+              >
+                {[2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+              </select>
+              <svg className="w-4 h-4 text-blue-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </div>
+            <div className="relative">
+              <select 
+                value={month} 
+                onChange={(e) => setMonth(Number(e.target.value))} 
+                className="pl-3 pr-8 py-1.5 sm:py-2 bg-white border border-blue-100 rounded-xl text-slate-800 font-bold focus:ring-2 focus:ring-blue-500/50 outline-none cursor-pointer hover:bg-blue-50/50 transition-all appearance-none text-xs sm:text-sm hover:border-blue-200"
+              >
+                {['January','February','March','April','May','June','July','August','September','October','November','December'].map((m, i) => (
+                  <option key={i+1} value={i+1}>{m}</option>
+                ))}
+              </select>
+              <svg className="w-4 h-4 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center items-center relative z-10 flex-1">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent"></div>
+          </div>
+        ) : (
+          <div className="relative z-10 w-full flex-1 flex flex-col min-h-0">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2 flex-1 min-h-0" style={{ gridTemplateRows: 'min-content', gridAutoRows: 'minmax(0, 1fr)' }}>
+              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                <div key={day} className="text-center font-extrabold text-blue-600/80 text-[9px] sm:text-[10px] py-1 tracking-widest uppercase flex items-end justify-center pb-1">
+                  {day}
+                </div>
+              ))}
+              {blanks.map(b => <div key={`blank-${b}`} className="p-1 sm:p-2 w-full h-full"></div>)}
+              {days.map(day => {
+                const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const record = data.find(d => d.date === dateStr);
+                const isSelected = selectedDate === dateStr;
+                
+                return (
+                  <div 
+                    key={day} 
+                    onClick={() => handleDayClick(day)}
+                    className={`
+                      relative flex flex-col items-center justify-start p-1.5 sm:p-2 pt-2 sm:pt-3 rounded-lg sm:rounded-xl cursor-pointer text-sm transition-all duration-300 w-full h-full overflow-hidden
+                      ${isSelected 
+                        ? 'bg-gradient-to-b from-blue-600 to-indigo-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.3)] scale-[1.02] z-10 border border-transparent' 
+                        : record 
+                          ? 'bg-pink-50 text-pink-900 hover:bg-pink-100 border border-pink-200' 
+                          : 'bg-slate-50 text-slate-800 hover:bg-slate-100 border border-slate-200'}
+                    `}
+                  >
+                    <span className="relative z-10 text-sm sm:text-base font-extrabold leading-none">{day}</span>
+                    {record?.status && (
+                      <span className={`text-[9px] sm:text-[10px] w-full text-center mt-1 sm:mt-2 px-1 font-bold line-clamp-2 leading-tight ${isSelected ? 'text-pink-100' : 'text-rose-600'}`}>
+                        {record.status}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
-      {loading ? (
-        <div className="text-center py-10 text-gray-500">Loading...</div>
-      ) : (
-        <div className="grid grid-cols-7 gap-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center font-bold py-2 bg-gray-100">{day}</div>
-          ))}
-          {blanks.map(b => <div key={`blank-${b}`} className="p-4 bg-gray-50"></div>)}
-          {days.map(day => {
-            const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-            const hasData = data.some(d => d.date === dateStr);
-            return (
-              <div 
-                key={day} 
-                onClick={() => handleDayClick(day)}
-                className={`p-4 border text-center cursor-pointer hover:bg-blue-50 transition-colors 
-                  ${selectedDate === dateStr ? 'ring-2 ring-blue-500 bg-blue-100' : ''}
-                  ${hasData ? 'bg-green-100 border-green-300' : 'bg-white'}`}
-              >
-                {day}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
+      {/* Modal Popup */}
       {selectedDate && (
-        <div className="mt-8 p-6 bg-slate-50 border rounded">
-          <h3 className="text-xl font-bold mb-2">Status for {selectedDate}</h3>
-          {selectedStatus ? (
-            <p className="text-gray-800 whitespace-pre-wrap">{selectedStatus}</p>
-          ) : (
-            <p className="text-gray-500 italic">No status recorded for this day.</p>
-          )}
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200" 
+          onClick={() => setSelectedDate(null)}
+        >
+          <div 
+            className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-200" 
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="p-5 sm:p-7 bg-gradient-to-br from-blue-50 to-indigo-50/50">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-[10px] sm:text-xs font-bold text-blue-600 tracking-widest uppercase flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  {new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </h3>
+                <button 
+                  onClick={() => setSelectedDate(null)} 
+                  className="text-slate-400 hover:text-slate-700 transition-colors bg-white/50 hover:bg-white rounded-full p-1"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm border border-white/60">
+                {selectedStatus ? (
+                  <p className="text-rose-600 text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-bold max-h-[300px] overflow-y-auto custom-scrollbar">
+                    {selectedStatus}
+                  </p>
+                ) : (
+                  <p className="text-slate-500 italic flex items-center justify-center py-4 font-semibold text-sm">
+                    <svg className="w-5 h-5 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    No status recorded for this date.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

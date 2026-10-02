@@ -4,7 +4,7 @@
   "description": "Backend API for Day Status Management System",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "vitest run"
@@ -36,6 +36,7 @@
     "nodemon": "^3.1.14",
     "supertest": "^7.3.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.0.3"
   }

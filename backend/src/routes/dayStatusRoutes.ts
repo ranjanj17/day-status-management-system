@@ -7,5 +7,6 @@ const router = Router();
 router.get('/', dayStatusController.getStatuses);
 router.get('/:date', dayStatusController.getStatusByDate);
 router.put('/:date', authenticate, dayStatusController.updateStatus);
+router.delete('/:date', authenticate, dayStatusController.deleteStatus);
 
 export default router;

@@ -34,7 +34,13 @@ export const DataInputGrid: React.FC = () => {
     const currentRecord = data.find(d => d.date === dateStr);
     
     try {
-      if (value.trim() === '') return;
+      if (value.trim() === '') {
+        if (currentRecord) {
+          await api.delete(`/day-status/${dateStr}`);
+          setData(prev => prev.filter(d => d.date !== dateStr));
+        }
+        return;
+      }
       
       const payload: any = { status: value };
       if (currentRecord?.version !== undefined) {
@@ -141,7 +147,7 @@ export const DataInputGrid: React.FC = () => {
                                     }
                                   }}
                                   disabled={isSaving}
-                                  className={`w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-blue-500/50 transition-all font-bold disabled:opacity-50 text-xs sm:text-sm rounded-lg border cursor-text placeholder-transition ${record?.status ? 'bg-blue-50/40 border-blue-200 text-blue-700 shadow-sm' : 'bg-slate-50/80 border-transparent text-slate-800 placeholder-slate-400 hover:bg-blue-50/50 hover:border-blue-200 hover:placeholder-blue-500 hover:text-blue-600 hover:shadow-sm'}`}
+                                  className={`w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-pink-500/50 transition-all font-bold disabled:opacity-50 text-xs sm:text-sm rounded-lg border cursor-text placeholder-transition ${record?.status ? 'bg-pink-50/60 border-pink-200 text-rose-600 shadow-sm' : 'bg-slate-50/80 border-transparent text-slate-800 placeholder-slate-400 hover:bg-blue-50/50 hover:border-blue-200 hover:placeholder-blue-500 hover:text-blue-600 hover:shadow-sm'}`}
                                 />
                                 {isSaving && (
                                   <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">

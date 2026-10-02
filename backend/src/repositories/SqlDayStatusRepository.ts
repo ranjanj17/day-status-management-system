@@ -84,4 +84,8 @@ export class SqlDayStatusRepository implements DayStatusRepository {
       version: record.version,
     };
   }
+
+  async delete(date: string): Promise<void> {
+    await DayStatusModel.destroy({ where: { date } });
+  }
 }

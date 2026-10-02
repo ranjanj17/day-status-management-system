@@ -11,4 +11,5 @@ export interface DayStatusRepository {
   findByYear(year: number): Promise<DayStatusRecord[]>;
   findByYearAndMonth(year: number, month: number): Promise<DayStatusRecord[]>;
   upsert(date: string, status: string, userId: number, version?: number): Promise<DayStatusRecord>;
+  delete(date: string): Promise<void>;
 }

@@ -41,4 +41,8 @@ export class InMemoryDayStatusRepository implements DayStatusRepository {
     this.records.push(record);
     return record;
   }
+
+  async delete(date: string): Promise<void> {
+    this.records = this.records.filter(r => r.date !== date);
+  }
 }

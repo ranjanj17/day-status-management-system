@@ -86,3 +86,29 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: 'Something went wrong' } });
   }
 };
+
+export const deleteStatus = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Not authenticated' } });
+    }
+
+    const parsedParams = dateParamSchema.safeParse(req.params);
+
+    if (!parsedParams.success) {
+      return res.status(400).json({ success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid input' } });
+    }
+
+    const { date } = parsedParams.data;
+    const result = await dayStatusService.deleteStatus(date);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('deleteStatus error:', error);
+    res.status(500).json({ success: false, error: { code: 'INTERNAL_SERVER_ERROR', message: 'Something went wrong' } });
+  }
+};

@@ -59,3 +59,19 @@ export const updateStatus = async (date: string, status: string, userId: number,
     throw err;
   }
 };
+
+export const deleteStatus = async (date: string) => {
+  if (!isValidCalendarDate(date)) {
+    return { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid date' } };
+  }
+
+  try {
+    await dayStatusRepo.delete(date);
+    return {
+      success: true,
+      data: { deleted: true },
+    };
+  } catch (err: any) {
+    throw err;
+  }
+};

@@ -2,6 +2,80 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { monthsWithColors, dayColors } from '../data/constants';
 
+const StatusCell = ({ record, month, day, isSaving, handleSave }: any) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [val, setVal] = useState(record?.status || '');
+
+  useEffect(() => {
+    setVal(record?.status || '');
+  }, [record?.status]);
+
+  const onBlur = () => {
+    if (val !== (record?.status || '')) {
+      handleSave(month, day, val);
+    }
+    setIsEditing(false);
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur();
+    } else if (e.key === 'Escape') {
+      setVal(record?.status || '');
+      setIsEditing(false);
+    }
+  };
+
+  if (isSaving) {
+    return (
+      <div className="relative w-full h-10 sm:h-12 px-3 sm:px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-between shadow-inner">
+        <span className="text-xs sm:text-sm font-bold text-slate-400 truncate">{val || 'Saving...'}</span>
+        <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+    );
+  }
+
+  if (!record?.status || isEditing) {
+    return (
+      <input
+        type="text"
+        autoFocus={isEditing}
+        value={val}
+        onChange={e => setVal(e.target.value)}
+        placeholder="+ Add"
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        className="w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-blue-500/50 transition-all font-bold text-xs sm:text-sm rounded-lg border cursor-text bg-slate-50/80 border-transparent text-slate-800 placeholder-slate-400 hover:bg-blue-50/50 hover:border-blue-200 hover:placeholder-blue-500 hover:text-blue-600 hover:shadow-sm"
+      />
+    );
+  }
+
+  return (
+    <div className="group/cell relative w-full h-10 sm:h-12 px-3 sm:px-4 py-2 bg-pink-50/60 border border-pink-200 rounded-lg flex items-center shadow-sm transition-all hover:shadow-md cursor-pointer hover:border-pink-300" onClick={() => setIsEditing(true)}>
+      <span className="text-xs sm:text-sm font-bold text-rose-600 truncate pr-16">{record.status}</span>
+      <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center space-x-1 opacity-0 group-hover/cell:opacity-100 transition-opacity">
+        <button 
+          onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
+          className="p-1.5 bg-white text-blue-500 hover:bg-blue-500 hover:text-white rounded-md shadow-sm transition-colors border border-blue-100"
+          title="Edit"
+        >
+          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+        </button>
+        <button 
+          onClick={(e) => { e.stopPropagation(); handleSave(month, day, ''); }}
+          className="p-1.5 bg-white text-rose-500 hover:bg-rose-500 hover:text-white rounded-md shadow-sm transition-colors border border-rose-100"
+          title="Delete"
+        >
+          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export const DataInputGrid: React.FC = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [data, setData] = useState<any[]>([]);
@@ -136,28 +210,13 @@ export const DataInputGrid: React.FC = () => {
                         return (
                           <td key={`${month}-${day}`} className={`p-1 border-r border-slate-100 ${!isValidDate ? 'bg-[url("data:image/svg+xml,%3Csvg width=\'10\' height=\'10\' viewBox=\'0 0 10 10\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23f1f5f9\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M-1 11L11 -1V1L1 11H-1ZM11 11L-1 -1V1L9 11H11Z\'/%3E%3C/g%3E%3C/svg%3E")] bg-slate-100 cursor-not-allowed border-slate-200' : record?.status ? 'bg-blue-50/20' : 'bg-transparent hover:bg-slate-50'}`}>
                             {isValidDate ? (
-                              <div className="relative h-full w-full">
-                                <input
-                                  type="text"
-                                  defaultValue={record?.status || ''}
-                                  placeholder="+ Add"
-                                  onBlur={(e) => {
-                                    if (e.target.value !== (record?.status || '')) {
-                                      handleSave(month, day, e.target.value);
-                                    }
-                                  }}
-                                  disabled={isSaving}
-                                  className={`w-full h-10 sm:h-12 px-3 sm:px-4 py-2 outline-none focus:bg-white focus:ring-inset focus:ring-2 focus:ring-pink-500/50 transition-all font-bold disabled:opacity-50 text-xs sm:text-sm rounded-lg border cursor-text placeholder-transition ${record?.status ? 'bg-pink-50/60 border-pink-200 text-rose-600 shadow-sm' : 'bg-slate-50/80 border-transparent text-slate-800 placeholder-slate-400 hover:bg-blue-50/50 hover:border-blue-200 hover:placeholder-blue-500 hover:text-blue-600 hover:shadow-sm'}`}
-                                />
-                                {isSaving && (
-                                  <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
-                                    <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                  </div>
-                                )}
-                              </div>
+                              <StatusCell 
+                                record={record} 
+                                month={month} 
+                                day={day} 
+                                isSaving={isSaving} 
+                                handleSave={handleSave} 
+                              />
                             ) : (
                               <div className="text-slate-300 text-[10px] sm:text-xs text-center w-full h-12 sm:h-14 flex items-center justify-center font-extrabold uppercase tracking-widest opacity-80">Invalid</div>
                             )}
